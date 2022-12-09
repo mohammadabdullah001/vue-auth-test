@@ -1,13 +1,24 @@
 <template>
     <div id="app">
-        <nav>
-            <router-link to="/">Home</router-link> |
-            <router-link to="/about">About</router-link> |
-            <router-link to="/login">Login</router-link>
-        </nav>
+        <app-menu-nav />
         <router-view />
     </div>
 </template>
+
+<script>
+    import MenuNav from "@/components/MenuNav.vue";
+    export default {
+        name: "App",
+        components: {
+            "app-menu-nav": MenuNav,
+        },
+        data() {
+            return {
+                //
+            };
+        },
+    };
+</script>
 
 <style>
     #app {

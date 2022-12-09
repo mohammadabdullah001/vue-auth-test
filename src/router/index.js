@@ -1,6 +1,8 @@
 import Vue from "vue";
 import VueRouter from "vue-router";
 import HomeView from "../views/HomeView.vue";
+import { dashboard } from "./routes/dashboardRoute";
+import { auth } from "./routes/authRoute";
 
 Vue.use(VueRouter);
 
@@ -19,12 +21,8 @@ const routes = [
         component: () =>
             import(/* webpackChunkName: "about" */ "../views/AboutView.vue"),
     },
-    {
-        path: "/login",
-        name: "login",
-        component: () =>
-            import(/* webpackChunkName: "login" */ "@/views/LoginView.vue"),
-    },
+    ...dashboard,
+    ...auth,
 ];
 
 const router = new VueRouter({
