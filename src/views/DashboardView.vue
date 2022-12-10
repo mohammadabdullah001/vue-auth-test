@@ -27,7 +27,7 @@
         },
         async created() {
             try {
-                const resLogin = await this.$axios.get("api/user");
+                const resLogin = await this.$axios.get("api/admin/user");
 
                 await this.$store.dispatch("userModule/setUser", {
                     user: resLogin?.data,
