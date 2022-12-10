@@ -88,7 +88,7 @@
                             password_confirmation: this.passwordConfirmation,
                         }
                     );
-                    console.log(res);
+                    // console.log(res);
                     this.$bvToast.toast(res?.data?.message, {
                         title: "Reset Password",
                         variant: "success",
@@ -98,7 +98,7 @@
                         noAutoHide: true,
                     });
 
-                    // this.$router.replace({ name: "login" });
+                    this.$router.replace({ name: "login" });
                 } catch (error) {
                     this.$bvToast.toast(error?.response?.data?.message, {
                         title: "Error",

@@ -25,4 +25,27 @@ export const auth = [
         meta: { requiresAuth: false, requiresVisitor: true },
         props: (route) => ({ token: route.query.token }),
     },
+    {
+        path: "/send-verify-email",
+        name: "send-verify-email",
+        component: () =>
+            import(
+                /* webpackChunkName: "login" */ "@/views/SendMailVerificationView.vue"
+            ),
+        meta: {
+            requiresAuth: true,
+            requiresVisitor: false,
+            requiresVerifyMail: true,
+        },
+    },
+    {
+        path: "/verify-email",
+        name: "verify-email",
+        component: () =>
+            import(
+                /* webpackChunkName: "login" */ "@/views/MailVerificationView.vue"
+            ),
+        meta: { requiresAuth: true, requiresVisitor: false },
+        props: (route) => ({ token: route.query.token }),
+    },
 ];
