@@ -2,7 +2,7 @@
     <b-container class="bv-example-row">
         <b-row>
             <b-col cols="12">
-                <b-card class="mt-3" header="Login Form">
+                <b-card class="mt-3" header="Forgot Password">
                     <b-form
                         v-on:submit.prevent="onSubmit"
                         v-on:reset.prevent="onReset"
@@ -18,20 +18,6 @@
                                 type="email"
                                 placeholder="Enter email"
                             ></b-form-input>
-                        </b-form-group>
-
-                        <b-form-group label="Password:" label-for="password">
-                            <b-form-input
-                                id="password"
-                                v-model="password"
-                                type="text"
-                                placeholder="Enter password"
-                            ></b-form-input>
-                        </b-form-group>
-                        <b-form-group>
-                            <router-link to="/forgot-password"
-                                >Forgot Password</router-link
-                            >
                         </b-form-group>
 
                         <div class="mt-2">
@@ -54,11 +40,10 @@
 
 <script>
     export default {
-        name: "LoginView",
+        name: "ForgotPasswordView",
         data() {
             return {
                 email: "uhowell@example.com",
-                password: "password",
             };
         },
         methods: {
@@ -66,23 +51,21 @@
                 try {
                     await this.$axios.get("/sanctum/csrf-cookie");
 
-                    const resLogin = await this.$axios.post("api/auth/login", {
-                        email: this.email,
-                        password: this.password,
-                    });
-
-                    await this.$store.dispatch(
-                        "authModule/setIsAuthenticated",
+                    const res = await this.$axios.post(
+                        "api/auth/forgot-password",
                         {
-                            isAuthenticated: true,
+                            email: this.email,
                         }
                     );
 
-                    // await this.$store.dispatch("userModule/setUser", {
-                    //     user: resLogin?.data?.user,
-                    // });
-
-                    this.$router.replace({ name: "dashboard" });
+                    this.$bvToast.toast(res?.data?.message, {
+                        title: "Forgot Password",
+                        variant: "success",
+                        solid: true,
+                        // autoHideDelay: 5000,
+                        appendToast: true,
+                        noAutoHide: true,
+                    });
                 } catch (error) {
                     this.$bvToast.toast(error?.response?.data?.message, {
                         title: "Error",
@@ -96,7 +79,6 @@
             },
             onReset() {
                 this.email = "";
-                this.password = "";
             },
         },
     };

@@ -2,7 +2,7 @@
     <b-container class="bv-example-row">
         <b-row>
             <b-col cols="12">
-                <b-card class="mt-3" header="Login Form">
+                <b-card class="mt-3" header="Reset Password">
                     <b-form
                         v-on:submit.prevent="onSubmit"
                         v-on:reset.prevent="onReset"
@@ -28,10 +28,16 @@
                                 placeholder="Enter password"
                             ></b-form-input>
                         </b-form-group>
-                        <b-form-group>
-                            <router-link to="/forgot-password"
-                                >Forgot Password</router-link
-                            >
+                        <b-form-group
+                            label="Password Confirmation:"
+                            label-for="passwordConfirmation"
+                        >
+                            <b-form-input
+                                id="passwordConfirmation"
+                                v-model="passwordConfirmation"
+                                type="text"
+                                placeholder="Enter password confirmation"
+                            ></b-form-input>
                         </b-form-group>
 
                         <div class="mt-2">
@@ -54,11 +60,18 @@
 
 <script>
     export default {
-        name: "LoginView",
+        name: "ResetPasswordView",
+        props: {
+            token: {
+                type: String,
+                default: "",
+            },
+        },
         data() {
             return {
                 email: "uhowell@example.com",
                 password: "password",
+                passwordConfirmation: "password",
             };
         },
         methods: {
@@ -66,23 +79,26 @@
                 try {
                     await this.$axios.get("/sanctum/csrf-cookie");
 
-                    const resLogin = await this.$axios.post("api/auth/login", {
-                        email: this.email,
-                        password: this.password,
-                    });
-
-                    await this.$store.dispatch(
-                        "authModule/setIsAuthenticated",
+                    const res = await this.$axios.post(
+                        "api/auth/reset-password",
                         {
-                            isAuthenticated: true,
+                            token: this.token,
+                            email: this.email,
+                            password: this.password,
+                            password_confirmation: this.passwordConfirmation,
                         }
                     );
+                    console.log(res);
+                    this.$bvToast.toast(res?.data?.message, {
+                        title: "Reset Password",
+                        variant: "success",
+                        solid: true,
+                        // autoHideDelay: 5000,
+                        appendToast: true,
+                        noAutoHide: true,
+                    });
 
-                    // await this.$store.dispatch("userModule/setUser", {
-                    //     user: resLogin?.data?.user,
-                    // });
-
-                    this.$router.replace({ name: "dashboard" });
+                    // this.$router.replace({ name: "login" });
                 } catch (error) {
                     this.$bvToast.toast(error?.response?.data?.message, {
                         title: "Error",
@@ -97,6 +113,7 @@
             onReset() {
                 this.email = "";
                 this.password = "";
+                this.passwordConfirmation = "";
             },
         },
     };
