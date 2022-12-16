@@ -53,6 +53,8 @@
 </template>
 
 <script>
+    import { addTimeInMinutes, currentTime, timeDifference } from "@/helpers";
+
     export default {
         name: "LoginView",
         data() {
@@ -77,6 +79,17 @@
                             isAuthenticated: true,
                         }
                     );
+
+                    await this.$store.dispatch("authModule/setAuthTimeout", {
+                        time: 60000,
+                    });
+
+                    // await this.$store.dispatch(
+                    //     "authModule/setTokenExpireTime",
+                    //     {
+                    //         tokenExpireTime: addTimeInMinutes(1),
+                    //     }
+                    // );
 
                     // await this.$store.dispatch("userModule/setUser", {
                     //     user: resLogin?.data?.user,
